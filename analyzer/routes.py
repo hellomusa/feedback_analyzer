@@ -3,4 +3,12 @@ from analyzer import app
 
 @app.route("/")
 def home():
-	return "<h1> hello world! </h1>"
+	return render_template('home.html')
+
+@app.route("/tweets")
+def tweets():
+	return render_template('tweets.html')
+
+@app.route("/login")
+def login():
+	return render_template('login.html')
