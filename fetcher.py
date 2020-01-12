@@ -10,6 +10,8 @@ import sys, argparse
 import jsonpickle
 import requests
 import tweepy
+from analyzer import db
+from analyzer.models import Tweet
 
 def main():
     parser = argparse.ArgumentParser()
@@ -20,9 +22,6 @@ def main():
 
     consumer_token= args.c_api_key
     consumer_secret= args.c_api_secret
-    
-    print(f'token: {consumer_token}')
-    print(f'secret: {consumer_secret}')
 
     auth = tweepy.AppAuthHandler(consumer_token, consumer_secret)
     auth.secure = True
@@ -61,8 +60,16 @@ def main():
                     print("No more tweets found")
                     break
                 for tweet in new_tweets:
-                    f.write(jsonpickle.encode(tweet._json, unpicklable=False) + '\n')
-                tweet_count += len(new_tweets)
+                    tweet_text = tweet._json['text']
+                    tweet_user = tweet._json['user']['screen_name']
+                    tweet_replies = tweet._json['reply_count']
+                    tweet_pfp = tweet._json['user']['profile_image_url']
+                    tweet_date = tweet._json['created_at']
+
+                    tw = Tweet(username=tweet_user, user_avatar=tweet_pfp, tweet_content=tweet_text, date_posted=tweet_date, is_technical=None)
+                    db.Tweet.add(tw)
+                    db.Tweet.commit()
+                    
                 print("Downloaded {0} tweets".format(tweet_count))
                 max_id = new_tweets[-1].id
             except tweepy.TweepError as e:
