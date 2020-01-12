@@ -1,19 +1,32 @@
+import re, string, random, argparse, time
+import mysql.connector
 from nltk.corpus import twitter_samples, stopwords
 from nltk.tag import pos_tag
 from nltk.stem.wordnet import WordNetLemmatizer
 from nltk.tokenize import word_tokenize
-
 from nltk import FreqDist, classify, NaiveBayesClassifier
 
-import re, string, random
 
-stop_words = stopwords.words('english') # gets a list of stop words in English such as "and", "or", "the"
+parser = argparse.ArgumentParser()
 
+parser.add_argument('sql_password', help='SQL database password')
 
+args = parser.parse_args()
 
+mydb = mysql.connector.connect(
+host = '15.222.147.65',
+user = 'root',
+passwd = args.sql_password,
+database = 'admin_prod'
+)
+
+mycursor = mydb.cursor()
+
+stop_words = stopwords.words('english')
 positive_tweets = twitter_samples.strings('positive_tweets.json')
 negative_tweets = twitter_samples.strings('negative_tweets.json')
 tweet_tokens = twitter_samples.tokenized('positive_tweets.json')[0]
+
 
 def remove_noise(tweet_tokens, stop_words = ()):
 
@@ -39,7 +52,6 @@ def remove_noise(tweet_tokens, stop_words = ()):
     
     return cleaned_tokens
 
-#print(remove_noise(tweet_tokens, stop_words))
 
 positive_tweet_tokens = twitter_samples.tokenized('positive_tweets.json')
 negative_tweet_tokens = twitter_samples.tokenized('negative_tweets.json')
@@ -53,87 +65,66 @@ for tokens in positive_tweet_tokens:
 for tokens in negative_tweet_tokens:
     negative_cleaned_tokens_list.append(remove_noise(tokens, stop_words)) # cleans the negative tweets
 
-#print(positive_tweet_tokens[500])
-#print(positive_cleaned_tokens_list[500])
 
 def get_all_words(cleaned_tokens_list):
     for tokens in cleaned_tokens_list:
         for token in tokens:
             yield token
 
+
 all_pos_words = get_all_words(positive_cleaned_tokens_list)
 all_neg_words = get_all_words(negative_cleaned_tokens_list)
-
 freq_dist_pos = FreqDist(all_pos_words)
-#print(freq_dist_pos.most_common(10))
 freq_dist_neg = FreqDist(all_neg_words)
-#print(freq_dist_neg.most_common(10))
+
 
 def get_tweets_for_model(cleaned_tokens_list):
     for tweet_tokens in cleaned_tokens_list:
         yield dict([token, True] for token in tweet_tokens)
 
+
 positive_tokens_for_model = get_tweets_for_model(positive_cleaned_tokens_list)
 negative_tokens_for_model = get_tweets_for_model(negative_cleaned_tokens_list)
 
-positive_dataset = [(tweet_dict, "Positive")
+positive_dataset = [(tweet_dict, '1')
                      for tweet_dict in positive_tokens_for_model]
 
-negative_dataset = [(tweet_dict, "Negative")
+negative_dataset = [(tweet_dict, '0')
                      for tweet_dict in negative_tokens_for_model]
+
 
 dataset = positive_dataset + negative_dataset
 
 random.shuffle(dataset)
-
 train_data = dataset[:7000]
 test_data = dataset[7000:]
-
 classifier = NaiveBayesClassifier.train(train_data)
 
-print("Accuracy is:", classify.accuracy(classifier, test_data))
+while(True):
+    sql_select_query = "select * from tweets"
+    mycursor = mydb.cursor()
+    mycursor.execute(sql_select_query)
+    tweets = mycursor.fetchall()
 
-print(classifier.show_most_informative_features(10))
+    for tweet in tweets:
+        tweet_class = classifier.classify(dict([token, True] for token in (remove_noise(word_tokenize(tweet[3])))))    
 
-
-custom_tweet = "I ordered just once from TerribleCo, they screwed up, never used the app again."
-
-custom_tokens = remove_noise(word_tokenize(custom_tweet))
-
-print(classifier.classify(dict([token, True] for token in custom_tokens)))
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-'''
-def lemmatize_sentence(tokens):
-    lemmatizer = WordNetLemmatizer()
-    lemmatized_sentence = []
-    for word, tag in pos_tag(tokens):
-        if tag.startswith('NN'):
-            pos = 'n'
-        elif tag.startswith('VB'):
-            pos = 'v'
+        if tweet_class == '1':
+            print('test')
+            tweet_id = tweet[6]
+            sql_update_query = "UPDATE tweets SET tweet_class = %s WHERE tweet_id = %s"
+            print(tweet_class, tweet_id)
+            inputData = (tweet_class, tweet_id)
+            mycursor.execute(sql_update_query, inputData)
+            mydb.commit()
+            
         else:
-            pos = 'a'
-        lemmatized_sentence.append(lemmatizer.lemmatize(word, pos))
-    return lemmatized_sentence
-
-print(lemmatize_sentence(tweet_tokens))
-'''
-#print(tweet_tokens[0])
+            print('test2')
+            tweet_id = tweet[6]
+            sql_update_query = "UPDATE tweets SET tweet_class = %s WHERE tweet_id = %s"
+            inputData = (tweet_class, tweet_id)
+            mycursor.execute(sql_update_query, inputData)
+            mydb.commit()
+        
+    time.sleep(300)
+            
