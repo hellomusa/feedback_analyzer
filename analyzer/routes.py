@@ -3,7 +3,7 @@ from analyzer import app
 from analyzer.twitter_funcs import *
 
 
-@app.route("/")
+@app.route("/", methods=['GET', 'POST'])
 def home():
 	tweets = get_tweets()
 	tweets_count = get_recent_tweets_count(tweets)
@@ -33,3 +33,14 @@ def toggle_tweets(technical_or_not):
 	tweets = get_tweets(is_technical)
 
 	return render_template('tweets.html', tweets=tweets)
+
+
+@app.route("/login", methods=['GET', 'POST'])
+def login():
+	if request.method == 'POST':
+		email = request.form['email']
+		password = request.form['password']
+		if email == 'admin@admin.com' and password == 'admin':
+			return redirect(url_for('home'))
+
+	return render_template('login.html')
