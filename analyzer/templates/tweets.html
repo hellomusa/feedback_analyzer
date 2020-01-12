@@ -5,10 +5,10 @@
                 <div class="d-sm-flex justify-content-between align-items-center mb-4">
                     <h3 class="text-dark mb-0">Dashboard</h3>
                     <div>
-                        <div class="form-check"><input class="form-check-input" type="radio" id="panelCheck"><label class="form-check-label">Technical</label></div>
+                        <div class="form-check"><a href="/tweets/technical"><input type="button" value="Technical"/></a></div>
                     </div>
                     <div>
-                        <div class="form-check"><input class="form-check-input" type="radio" id="panelCheck" name="panelCheck"><label class="form-check-label">Non Technical</label></div>
+                        <div class="form-check"><a href="/tweets/not-technical"><input type="button" value="Non Technical"/></a></div>
                     </div><a class="btn btn-primary btn-sm d-none d-sm-inline-block" role="button" href=""><i class="fas fa-download fa-sm text-white-50"></i>&nbsp;Generate Report</a></div>
                 <div class="card shadow">
                     <div class="card-header py-3">
@@ -38,7 +38,13 @@
                                     <tr>
                                         <td><img class="rounded-circle mr-2" width="30" height="30" src="{{ tweet[2] }}">{{ tweet[1] }}</td>
                                         <td><a href="https://www.twitter.com/{{ tweet[1] }}/status/{{ tweet[6] }}">{{ tweet[3] }}</a></td>
-                                        <td>33</td>
+                                        <td>{% if tweet[7] == '1' %}
+                                                <font color="green">Good</font>
+                                            {% elif tweet[7] == '0' %}
+                                                <font color="red">Bad</font>
+                                            {% endif %}
+                                         </td>
+
                                         <td>{{ tweet[4][:10] }}</td>
                                     </tr>
                                     {% endfor %}
