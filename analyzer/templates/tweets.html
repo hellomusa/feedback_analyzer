@@ -29,77 +29,25 @@
                                     <tr>
                                         <th style="width: 150px;">Name</th>
                                         <th>Tweet</th>
-                                        <th style="width: 50px;">Replies</th>
+                                        <th style="width: 50px;">Risk</th>
                                         <th style="width: 100px;">Date</th>
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    {% for tweet in tweets %}
                                     <tr>
-                                        <td><img class="rounded-circle mr-2" width="30" height="30" src="/assets/img/avatars/avatar1.jpeg">Airi</td>
-                                        <td>Why website no work?? Is RBC hack!???!</td>
+                                        <td><img class="rounded-circle mr-2" width="30" height="30" src="{{ tweet[2] }}">{{ tweet[1] }}</td>
+                                        <td><a href="https://www.twitter.com/{{ tweet[1] }}/status/{{ tweet[6] }}">{{ tweet[3] }}</a></td>
                                         <td>33</td>
-                                        <td>2008/11/28</td>
+                                        <td>{{ tweet[4][:10] }}</td>
                                     </tr>
-                                    <tr>
-                                        <td><img class="rounded-circle mr-2" width="30" height="30" src="/assets/img/avatars/avatar2.jpeg">Angelica</td>
-                                        <td>Chief Executive Officer(CEO)</td>
-                                        <td>47</td>
-                                        <td>2009/10/09<br></td>
-                                    </tr>
-                                    <tr>
-                                        <td><img class="rounded-circle mr-2" width="30" height="30" src="/assets/img/avatars/avatar3.jpeg">Ashton</td>
-                                        <td>Junior Technical Author</td>
-                                        <td>66</td>
-                                        <td>2009/01/12<br></td>
-                                    </tr>
-                                    <tr>
-                                        <td><img class="rounded-circle mr-2" width="30" height="30" src="/assets/img/avatars/avatar4.jpeg">Bradley</td>
-                                        <td>Software Engineer</td>
-                                        <td>41</td>
-                                        <td>2012/10/13<br></td>
-                                    </tr>
-                                    <tr>
-                                        <td><img class="rounded-circle mr-2" width="30" height="30" src="/assets/img/avatars/avatar5.jpeg">Brenden</td>
-                                        <td>Software Engineer</td>
-                                        <td>28</td>
-                                        <td>2011/06/07<br></td>
-                                    </tr>
-                                    <tr>
-                                        <td><img class="rounded-circle mr-2" width="30" height="30" src="/assets/img/avatars/avatar1.jpeg">Brielle</td>
-                                        <td>Integration Specialist</td>
-                                        <td>61</td>
-                                        <td>2012/12/02<br></td>
-                                    </tr>
-                                    <tr>
-                                        <td><img class="rounded-circle mr-2" width="30" height="30" src="/assets/img/avatars/avatar2.jpeg">Bruno<br></td>
-                                        <td>Software Engineer</td>
-                                        <td>38</td>
-                                        <td>2011/05/03<br></td>
-                                    </tr>
-                                    <tr>
-                                        <td><img class="rounded-circle mr-2" width="30" height="30" src="/assets/img/avatars/avatar3.jpeg">Caesar</td>
-                                        <td>Pre-Sales Support</td>
-                                        <td>21</td>
-                                        <td>2011/12/12<br></td>
-                                    </tr>
-                                    <tr>
-                                        <td><img class="rounded-circle mr-2" width="30" height="30" src="/assets/img/avatars/avatar4.jpeg">Cara</td>
-                                        <td>Sales Assistant</td>
-                                        <td>46</td>
-                                        <td>2011/12/06<br></td>
-                                    </tr>
-                                    <tr>
-                                        <td><img class="rounded-circle mr-2" width="30" height="30" src="/assets/img/avatars/avatar5.jpeg">Cedric</td>
-                                        <td>Senior JavaScript Developer</td>
-                                        <td>22</td>
-                                        <td>2012/03/29<br></td>
-                                    </tr>
+                                    {% endfor %}
                                 </tbody>
                                 <tfoot>
                                     <tr>
                                         <td><strong>Name</strong></td>
                                         <td><strong>Tweet</strong></td>
-                                        <td><strong>Replies</strong></td>
+                                        <td><strong>Risk</strong></td>
                                         <td><strong>Date</strong></td>
                                     </tr>
                                 </tfoot>
