@@ -16,3 +16,22 @@ Run nlp.py to train the model and classify the tweets as "positive" or "negative
 Run technical.py to classify the tweets as technical or non technical
 
 Run run.py to start the web app
+
+# Project Members
+
+## Hamza Sohail
+Computer Science, 1st Year, Python, Java and C/C++
+
+GitHub: h4sohail
+
+## Shane Fernandes
+
+Computer Science, 1st Year, Python and Java
+
+GitHub: shane-f03
+
+## Musa Ali
+
+Computer Science, 1st Year, Python and Java
+
+GitHub: hellomusa
