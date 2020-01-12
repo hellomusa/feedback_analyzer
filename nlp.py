@@ -8,9 +8,7 @@ from nltk import FreqDist, classify, NaiveBayesClassifier
 
 
 parser = argparse.ArgumentParser()
-
 parser.add_argument('sql_password', help='SQL database password')
-
 args = parser.parse_args()
 
 mydb = mysql.connector.connect(
@@ -19,7 +17,6 @@ user = 'root',
 passwd = args.sql_password,
 database = 'admin_prod'
 )
-
 mycursor = mydb.cursor()
 
 stop_words = stopwords.words('english')
@@ -110,7 +107,6 @@ while(True):
         tweet_class = classifier.classify(dict([token, True] for token in (remove_noise(word_tokenize(tweet[3])))))    
 
         if tweet_class == '1':
-            print('test')
             tweet_id = tweet[6]
             sql_update_query = "UPDATE tweets SET tweet_class = %s WHERE tweet_id = %s"
             print(tweet_class, tweet_id)
@@ -119,7 +115,6 @@ while(True):
             mydb.commit()
             
         else:
-            print('test2')
             tweet_id = tweet[6]
             sql_update_query = "UPDATE tweets SET tweet_class = %s WHERE tweet_id = %s"
             inputData = (tweet_class, tweet_id)
