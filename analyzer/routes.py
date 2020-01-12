@@ -4,7 +4,7 @@ import argparse
 import mysql.connector
 
 
-def get_tweets():
+def get_tweets(is_technical=None):
 	parser = argparse.ArgumentParser()
 	parser.add_argument('sql_password', help='SQL database password')
 	args = parser.parse_args()
@@ -16,7 +16,13 @@ def get_tweets():
 	database = 'admin_prod'
 	)
 
-	sql_select_query = "select * from tweets"
+	if is_technical == None:
+		sql_select_query = "SELECT * from tweets"
+	elif is_technical:
+		sql_select_query = "SELECT * from tweets WHERE is_technical = 1"
+	else:
+		sql_select_query = "SELECT * from tweets WHERE is_technical is NULL"
+
 	mycursor = mydb.cursor()
 	mycursor.execute(sql_select_query)
 	tweets = mycursor.fetchall()
@@ -43,9 +49,22 @@ def home():
 	tweets_count = get_recent_tweets_count(tweets)
 	return render_template('home.html', tweets_count=tweets_count)
 
+
 @app.route("/tweets")
 def tweets():
 	tweets = get_tweets()
+	return render_template('tweets.html', tweets=tweets)
+
+
+@app.route("/tweets/<technical_or_not>")
+def toggle_tweets(technical_or_not):
+	if technical_or_not == "technical":
+		is_technical = True
+	elif technical_or_not == "not-technical":
+		is_technical = False
+
+	tweets = get_tweets(is_technical)
+
 	return render_template('tweets.html', tweets=tweets)
 
 @app.route("/login")
