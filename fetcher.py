@@ -1,13 +1,9 @@
 # -*- coding: utf-8 -*-
-
 import sys, argparse, time
 import tweepy
 import mysql.connector
 import unicodedata
 from unidecode import unidecode
-
-
-temp_tweets = []
 
 
 def string_cleaner(input_string):
@@ -91,18 +87,20 @@ def main():
                     tweet_user = tweet._json['user']['screen_name']
                     tweet_pfp = tweet._json['user']['profile_image_url']
                     tweet_date = tweet._json['created_at']
+                    tweet_id = tweet._json['id_str']
+                    
                     try:
                         tweet_text.encode('latin1')
                         
-                        sql = 'INSERT INTO tweets (username, user_avatar, tweet_content, date_posted) VALUES (%s, %s, %s, %s)'
-                        val = (tweet_user, tweet_pfp, tweet_text, tweet_date)
+                        sql = 'INSERT INTO tweets (username, user_avatar, tweet_content, date_posted, tweet_id) VALUES (%s, %s, %s, %s, %s)'
+                        val = (tweet_user, tweet_pfp, tweet_text, tweet_date, tweet_id)
                         mycursor.execute(sql, val)
                         mydb.commit()
 
                     except UnicodeEncodeError:
                         tweet_text = string_cleaner(tweet_text)
-                        sql = 'INSERT INTO tweets (username, user_avatar, tweet_content, date_posted) VALUES (%s, %s, %s, %s)'
-                        val = (tweet_user, tweet_pfp, tweet_text, tweet_date)
+                        sql = 'INSERT INTO tweets (username, user_avatar, tweet_content, date_posted, tweet_id) VALUES (%s, %s, %s, %s, %s)'
+                        val = (tweet_user, tweet_pfp, tweet_text, tweet_date, tweet_id)
                         mycursor.execute(sql, val)
                         mydb.commit()
 
@@ -116,6 +114,6 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    temp_tweets = []
     
-
+    main()
