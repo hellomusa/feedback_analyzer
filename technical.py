@@ -20,6 +20,7 @@ keywords = [
     "404",
     "broken",
     "technical",
+    "question",
     "password",
     "user",
     "sign in",
