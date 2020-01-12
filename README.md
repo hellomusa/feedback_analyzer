@@ -1,7 +1,7 @@
 # Feedback Analyzer
 Monitors, tracks, analyzes and categorizes social media feedback 
 
-# How to build/use
+# How to build and use
 
 First of install all the dependancies, pip install -r requirements.txt
 
