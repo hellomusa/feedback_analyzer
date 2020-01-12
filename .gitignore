@@ -1,4 +1,4 @@
 venv
 __pycache__/
-analyzer/__pycache__/
+analyzer/__pycache__/*
 .vscode/settings.json
