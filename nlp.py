@@ -109,7 +109,6 @@ while(True):
         if tweet_class == '1':
             tweet_id = tweet[6]
             sql_update_query = "UPDATE tweets SET tweet_class = %s WHERE tweet_id = %s"
-            print(tweet_class, tweet_id)
             inputData = (tweet_class, tweet_id)
             mycursor.execute(sql_update_query, inputData)
             mydb.commit()
