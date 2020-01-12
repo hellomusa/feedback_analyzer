@@ -40,7 +40,7 @@ def get_recent_tweets_count(tweets):
 	return counter
 
 
-def are_tweets_good(tweets):
+def get_tweet_sentiment(tweets):
 	good_count = 0
 	bad_count = 0
 	for tweet in tweets:
@@ -49,8 +49,16 @@ def are_tweets_good(tweets):
 		else:
 			bad_count += 1
 
+	return_list = []
+
 	if good_count > bad_count:
-		return True
+		return_list.append(True)
 	else:
-		return False
+		return_list.append(False)
+
+	return_list.append(good_count)
+	return_list.append(bad_count)
+
+	return return_list
+
 
