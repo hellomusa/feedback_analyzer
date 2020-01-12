@@ -1,8 +1,10 @@
 from nltk.corpus import twitter_samples, stopwords
 from nltk.tag import pos_tag
 from nltk.stem.wordnet import WordNetLemmatizer
+from nltk.tokenize import word_tokenize
+
 from nltk import FreqDist, classify, NaiveBayesClassifier
-import mysql.connector
+
 import re, string, random
 
 stop_words = stopwords.words('english') # gets a list of stop words in English such as "and", "or", "the"
@@ -93,6 +95,12 @@ print("Accuracy is:", classify.accuracy(classifier, test_data))
 
 print(classifier.show_most_informative_features(10))
 
+
+custom_tweet = "I ordered just once from TerribleCo, they screwed up, never used the app again."
+
+custom_tokens = remove_noise(word_tokenize(custom_tweet))
+
+print(classifier.classify(dict([token, True] for token in custom_tokens)))
 
 
 
