@@ -38,7 +38,13 @@
                                     <tr>
                                         <td><img class="rounded-circle mr-2" width="30" height="30" src="{{ tweet[2] }}">{{ tweet[1] }}</td>
                                         <td><a href="https://www.twitter.com/{{ tweet[1] }}/status/{{ tweet[6] }}">{{ tweet[3] }}</a></td>
-                                        <td>33</td>
+                                        <td>{% if tweet[7] == '1' %}
+                                                <font color="green">Good</font>
+                                            {% elif tweet[7] == '0' %}
+                                                <font color="red">Bad</font>
+                                            {% endif %}
+                                         </td>
+
                                         <td>{{ tweet[4][:10] }}</td>
                                     </tr>
                                     {% endfor %}
