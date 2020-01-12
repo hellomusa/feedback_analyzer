@@ -34,8 +34,3 @@ def toggle_tweets(technical_or_not):
 	tweets = get_tweets(is_technical)
 
 	return render_template('tweets.html', tweets=tweets)
-
-
-@app.route("/login")
-def login():
-	return render_template('login.html')
