@@ -27,9 +27,7 @@ def tweets():
 	mycursor.execute(sql_select_query)
 	tweets = mycursor.fetchall()
 
-	# tweets = Database.get.all ()
-	# pass in tweets list to render_template
-	return render_template('tweets.html')
+	return render_template('tweets.html', tweets=tweets)
 
 @app.route("/login")
 def login():
